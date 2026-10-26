@@ -1,5 +1,8 @@
 <template>
-  <div>System Home</div>
+  <div>Welcome: {{ userInfo?.username }}</div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useUser } from '@/utils/user'
+const { userInfo } = useUser()
+</script>
