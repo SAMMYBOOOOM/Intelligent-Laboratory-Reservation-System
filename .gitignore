@@ -55,6 +55,7 @@ Python package/build files
 
 Environment variables and secrets
 .env .env.*
+/backend/.env
 
 Allow example environment files
 !.env.example

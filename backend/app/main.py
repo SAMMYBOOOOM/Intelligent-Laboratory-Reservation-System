@@ -1,15 +1,28 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+
 from app.models.user import User
 from app.database import Base, engine
-from app.api.auth import router as auth_router
-from app.api.user import router as user_router
+from app.api import api
+from app.common.exceptions import (
+    BusinessException,
+    bussiness_excpetion_hadler,
+    http_excpetion_hadler,
+    validation_excpetion_hadler,
+    global_excpetion_hadler,
+)
 
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)   # Create database tables
 
 app = FastAPI()
+app.include_router(api)
 
-app.include_router(auth_router, prefix="/api")
-app.include_router(user_router, prefix="/api")
+# Register exception handlers
+app.add_exception_handler(BusinessException, bussiness_excpetion_hadler)
+app.add_exception_handler(HTTPException, http_excpetion_hadler)
+app.add_exception_handler(RequestValidationError, validation_excpetion_hadler)
+# Global exception handler
+app.add_exception_handler(Exception, global_excpetion_hadler)
 
 @app.get("/")
 def root():
